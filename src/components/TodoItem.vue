@@ -1,13 +1,15 @@
 <template>
-  <li :class="{ done: todo.completed }">
-    <input type="checkbox" v-model="todo.completed" />
-    <span>{{ todo.text }}</span>
-    <button @click="$emit('delete')">🗑</button>
+  <li class="todo-item">
+    <input type="checkbox" :checked="localCompleted" @change="toggle" />
+    <span :class="{ completed: localCompleted }">{{ todo.text }}</span>
+    <button @click="$emit('delete', todo.id)">🗑</button>
   </li>
 </template>
 
 <script lang="ts" setup>
-defineProps<{
+import { computed } from 'vue'
+
+const props = defineProps<{
   todo: {
     id: number
     text: string
@@ -15,18 +17,28 @@ defineProps<{
   }
 }>()
 
-defineEmits<{
-  (e: 'delete'): void
+const emit = defineEmits<{
+  (e: 'delete', id: number): void
+  (e: 'toggle', id: number): void
 }>()
+
+const localCompleted = computed(() => props.todo.completed)
+
+function toggle() {
+  emit('toggle', props.todo.id)
+}
 </script>
 
 <style scoped>
-li {
+.todo-item {
   display: flex;
   justify-content: space-between;
-  padding: 0.5em;
+  align-items: center;
+  padding: 6px;
+  border-bottom: 1px solid #eee;
 }
-.done span {
+.completed {
   text-decoration: line-through;
+  opacity: 0.6;
 }
 </style>
