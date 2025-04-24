@@ -14,11 +14,16 @@
 </template>
 
 <script lang="ts" setup>
+import { onMounted } from 'vue'
 import { useTodoStore } from './stores/todo'
 import TodoList from './components/TodoList.vue'
 import CreateTodo from './components/CreateTodo.vue'
 
 const store = useTodoStore()
+
+onMounted(() => {
+  store.loadFromStorage()
+})
 </script>
 
 <style scoped>
