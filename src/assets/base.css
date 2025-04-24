@@ -1,0 +1,40 @@
+:root {
+  --bg: #1e1e1e;
+  --fg: #d4d4d4;
+  --accent: #569cd6;
+  --gray: #3c3c3c;
+  --border: #2a2a2a;
+  --success: #4ec9b0;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 2rem;
+  transition: all 0.2s ease;
+}
+
+button {
+  background: var(--gray);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: var(--accent);
+  color: white;
+}
+
+input {
+  background: var(--gray);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  padding: 0.5rem;
+  border-radius: 4px;
+}
