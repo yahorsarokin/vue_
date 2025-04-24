@@ -1,29 +1,65 @@
-# .
+# Vue Todo List App
 
-This template should help get you started developing with Vue 3 in Vite.
+A modern Todo List application built with Vue 3, TypeScript, and Vite.
 
-## Recommended IDE Setup
+## Features
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Create, edit, and delete todos
+- Mark todos as complete
+- Filter todos by status
+- Modern and responsive UI
+- Type-safe development with TypeScript
+- Fast development experience with Vite
 
-## Customize configuration
+## Tech Stack
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- Vue 3 - Progressive JavaScript framework
+- TypeScript - Type-safe JavaScript
+- Vite - Next Generation Frontend Tooling
+- Vue Router - Official router for Vue.js
+- Pinia - State management library for Vue
 
 ## Project Setup
 
-```sh
+1. Install dependencies:
+
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+2. Start development server:
 
-```sh
+```bash
 npm run dev
 ```
 
-### Compile and Minify for Production
+3. Build for production:
 
-```sh
+```bash
 npm run build
 ```
+
+## Project Structure
+
+```
+src/
+├── assets/         # Static assets
+├── components/     # Reusable Vue components
+├── views/          # Page components
+├── stores/         # Pinia stores
+├── router/         # Vue Router configuration
+├── types/          # TypeScript type definitions
+└── App.vue         # Root component
+```
+
+## Development Guidelines
+
+- Use TypeScript for type safety
+- Follow Vue 3 Composition API
+- Use Pinia for state management
+- Keep components small and focused
+- Write meaningful commit messages
+
+## License
+
+MIT
