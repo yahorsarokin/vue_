@@ -21,7 +21,6 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, defineEmits } from 'vue'
 import type { Todo } from '../stores/todo'
 
 const props = defineProps<{
@@ -31,8 +30,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'close'): void
-  (e: 'toggle', id: number): void
-  (e: 'delete', id: number): void
+  (e: 'toggle', id: string): void
+  (e: 'delete', id: string): void
 }>()
 
 function close() {

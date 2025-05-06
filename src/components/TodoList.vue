@@ -28,16 +28,12 @@ import TodoModal from './TodoModal.vue'
 import type { Todo } from '../stores/todo'
 
 defineProps<{
-  todos: {
-    id: number
-    text: string
-    completed: boolean
-  }[]
+  todos: Todo[]
 }>()
 
 defineEmits<{
-  (e: 'delete', id: number): void
-  (e: 'toggle', id: number): void
+  (e: 'delete', id: string): void
+  (e: 'toggle', id: string): void
 }>()
 
 const isModalOpen = ref(false)

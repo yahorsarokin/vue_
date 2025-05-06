@@ -14,15 +14,21 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 import { useTodoStore } from './stores/todo'
 import TodoList from './components/TodoList.vue'
 import CreateTodo from './components/CreateTodo.vue'
+import { signInAnon } from './firebase'
 
 const store = useTodoStore()
 
 onMounted(() => {
-  store.loadFromStorage()
+  signInAnon()
+  store.loadFromFirestore()
+})
+
+onUnmounted(() => {
+  store.cleanup()
 })
 </script>
 

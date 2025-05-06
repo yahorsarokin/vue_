@@ -10,19 +10,16 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
+import type { Todo } from '../stores/todo'
 
 const props = defineProps<{
-  todo: {
-    id: number
-    text: string
-    completed: boolean
-  }
+  todo: Todo
 }>()
 
 const emit = defineEmits<{
-  (e: 'delete', id: number): void
-  (e: 'toggle', id: number): void
-  (e: 'click', todo: typeof props.todo): void
+  (e: 'delete', id: string): void
+  (e: 'toggle', id: string): void
+  (e: 'click', todo: Todo): void
 }>()
 
 const localCompleted = computed(() => props.todo.completed)
