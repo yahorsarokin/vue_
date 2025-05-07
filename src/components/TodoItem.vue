@@ -1,10 +1,18 @@
 <template>
   <li class="todo-item">
-    <input type="checkbox" class="checkbox" :checked="localCompleted" @change="toggle" />
-    <span :class="{ completed: localCompleted }" class="todo-text" @click="openTodo">{{
-      todo.text
-    }}</span>
-    <button @click="$emit('delete', todo.id)">🗑</button>
+    <div class="todo-content" @click="openTodo">
+      <input
+        type="checkbox"
+        class="checkbox"
+        :checked="localCompleted"
+        @change="toggle"
+        @click.stop
+      />
+      <span :class="{ completed: localCompleted }" class="todo-text">
+        {{ todo.text }}
+      </span>
+    </div>
+    <button @click.stop="$emit('delete', todo.id)" class="delete-btn danger">🗑</button>
   </li>
 </template>
 
@@ -38,21 +46,54 @@ function openTodo() {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px;
-  border-bottom: 1px solid #eee;
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border);
   cursor: pointer;
+  transition: var(--transition-fast);
 }
+
+.todo-item:last-child {
+  border-bottom: none;
+}
+
 .todo-item:hover {
-  background-color: #363636;
+  background-color: var(--medium);
 }
+
+.todo-content {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
 .completed {
   text-decoration: line-through;
   opacity: 0.6;
 }
+
 .todo-text {
-  flex-grow: 1;
-  margin: 0 10px;
+  margin: 0 var(--spacing-sm);
+  word-break: break-word;
 }
+
+.delete-btn {
+  padding: var(--spacing-xs);
+  min-width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: var(--transition-fast);
+}
+
+.todo-item:hover .delete-btn {
+  visibility: visible;
+  opacity: 1;
+}
+
 .checkbox {
   cursor: pointer;
 }

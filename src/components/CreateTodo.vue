@@ -1,7 +1,7 @@
 <template>
-  <form @submit.prevent="handleAdd">
-    <input v-model="newTodo" placeholder="Add new todo" />
-    <button type="submit">Add</button>
+  <form @submit.prevent="handleAdd" class="flex gap-sm">
+    <input v-model="newTodo" placeholder="Add new todo" class="flex-grow" type="text" />
+    <button type="submit" class="success">Add</button>
   </form>
 </template>
 
@@ -22,9 +22,7 @@ function handleAdd() {
 </script>
 
 <style scoped>
-form {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+.flex-grow {
+  flex-grow: 1;
 }
 </style>

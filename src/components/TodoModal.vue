@@ -7,20 +7,25 @@
       </div>
       <div class="modal-body">
         <p class="todo-text" :class="{ completed: todo.completed }">{{ todo.text }}</p>
-        <p class="todo-status">Status: {{ todo.completed ? 'Completed' : 'Active' }}</p>
-        <p class="todo-id">ID: {{ todo.id }}</p>
+        <p class="todo-status">
+          Status: <span :class="statusClass">{{ todo.completed ? 'Completed' : 'Active' }}</span>
+        </p>
+        <p class="todo-id">
+          ID: <span class="mono">{{ todo.id }}</span>
+        </p>
       </div>
       <div class="modal-footer">
-        <button @click="toggleTodo">
+        <button @click="toggleTodo" :class="todo.completed ? 'secondary' : 'success'">
           {{ todo.completed ? 'Mark as Active' : 'Mark as Completed' }}
         </button>
-        <button class="delete-button" @click="deleteTodo">Delete</button>
+        <button class="danger" @click="deleteTodo">Delete</button>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { defineEmits, computed } from 'vue'
 import type { Todo } from '../stores/todo'
 
 const props = defineProps<{
@@ -33,6 +38,8 @@ const emit = defineEmits<{
   (e: 'toggle', id: string): void
   (e: 'delete', id: string): void
 }>()
+
+const statusClass = computed(() => (props.todo.completed ? 'status-completed' : 'status-active'))
 
 function close() {
   emit('close')
@@ -55,51 +62,75 @@ function deleteTodo() {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 100;
+  animation: fadeIn 0.2s ease;
 }
 
 .modal-content {
-  background-color: white;
-  border-radius: 8px;
-  width: 400px;
-  max-width: 90%;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 500px;
+  box-shadow: var(--shadow-xl);
+  animation: scaleIn 0.2s ease;
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid #eee;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: var(--font-size-xl);
 }
 
 .modal-body {
-  padding: 1rem;
+  padding: var(--spacing-lg);
 }
 
 .modal-footer {
-  padding: 1rem;
+  padding: var(--spacing-md) var(--spacing-lg);
   display: flex;
   justify-content: flex-end;
-  gap: 0.5rem;
-  border-top: 1px solid #eee;
+  gap: var(--spacing-md);
+  border-top: 1px solid var(--border);
 }
 
 .close-button {
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: var(--font-size-2xl);
   cursor: pointer;
+  color: var(--light);
+  opacity: 0.7;
+  transition: var(--transition-fast);
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+}
+
+.close-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  opacity: 1;
 }
 
 .todo-text {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.4;
+  word-break: break-word;
 }
 
 .completed {
@@ -109,12 +140,48 @@ function deleteTodo() {
 
 .todo-status,
 .todo-id {
-  color: #666;
-  margin-bottom: 0.5rem;
+  color: var(--medium);
+  margin-bottom: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
-.delete-button {
-  background-color: #ff4d4f;
-  color: white;
+.status-completed {
+  color: var(--success);
+  font-weight: var(--font-weight-medium);
+}
+
+.status-active {
+  color: var(--warning);
+  font-weight: var(--font-weight-medium);
+}
+
+.mono {
+  font-family: monospace;
+  background-color: var(--background);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 </style>

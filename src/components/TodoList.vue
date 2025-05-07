@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul class="todo-list">
+    <transition-group name="slide-fade" tag="ul" class="todo-list">
       <TodoItem
         v-for="todo in todos"
         :key="todo.id"
@@ -9,7 +9,10 @@
         @toggle="$emit('toggle', $event)"
         @click="openModal($event)"
       />
-    </ul>
+    </transition-group>
+
+    <p v-if="todos.length === 0" class="empty-message">No todos found</p>
+
     <TodoModal
       v-if="selectedTodo"
       :isOpen="isModalOpen"
@@ -54,8 +57,15 @@ function closeModal() {
   list-style: none;
   padding: 0;
   margin: 0;
-  border: 1px solid white;
-  border-radius: 6px;
-  max-width: 600px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.empty-message {
+  text-align: center;
+  color: var(--medium);
+  padding: var(--spacing-md);
+  font-style: italic;
 }
 </style>
