@@ -6,26 +6,46 @@
         <button class="close-button" @click="close">×</button>
       </div>
       <div class="modal-body">
-        <p class="todo-text" :class="{ completed: todo.completed }">{{ todo.text }}</p>
-        <p class="todo-status">
-          Status: <span :class="statusClass">{{ todo.completed ? 'Completed' : 'Active' }}</span>
-        </p>
-        <p class="todo-id">
-          ID: <span class="mono">{{ todo.id }}</span>
-        </p>
+        <div v-if="isEditing" class="edit-form">
+          <input
+            v-model="editedText"
+            class="edit-input"
+            @keyup.enter="saveEdit"
+            @keyup.esc="cancelEdit"
+            ref="editInput"
+          />
+          <div class="edit-actions">
+            <button class="success" @click="saveEdit">Save</button>
+            <button class="secondary" @click="cancelEdit">Cancel</button>
+          </div>
+        </div>
+        <div v-else>
+          <p class="todo-text" :class="{ completed: todo.completed }">{{ todo.text }}</p>
+          <p class="todo-status">
+            Status: <span :class="statusClass">{{ todo.completed ? 'Completed' : 'Active' }}</span>
+          </p>
+          <p class="todo-id">
+            ID: <span class="mono">{{ todo.id }}</span>
+          </p>
+        </div>
       </div>
       <div class="modal-footer">
-        <button @click="toggleTodo" :class="todo.completed ? 'secondary' : 'success'">
+        <button v-if="!isEditing" class="secondary" @click="startEdit">Edit</button>
+        <button
+          v-if="!isEditing"
+          @click="toggleTodo"
+          :class="todo.completed ? 'secondary' : 'success'"
+        >
           {{ todo.completed ? 'Mark as Active' : 'Mark as Completed' }}
         </button>
-        <button class="danger" @click="deleteTodo">Delete</button>
+        <button v-if="!isEditing" class="danger" @click="deleteTodo">Delete</button>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { defineEmits, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import type { Todo } from '../stores/todo'
 
 const props = defineProps<{
@@ -37,11 +57,17 @@ const emit = defineEmits<{
   (e: 'close'): void
   (e: 'toggle', id: string): void
   (e: 'delete', id: string): void
+  (e: 'update', id: string, text: string): void
 }>()
 
 const statusClass = computed(() => (props.todo.completed ? 'status-completed' : 'status-active'))
 
+const isEditing = ref(false)
+const editedText = ref('')
+const editInput = ref<HTMLInputElement | null>(null)
+
 function close() {
+  isEditing.value = false
   emit('close')
 }
 
@@ -52,6 +78,25 @@ function toggleTodo() {
 function deleteTodo() {
   emit('delete', props.todo.id)
   close()
+}
+
+function startEdit() {
+  editedText.value = props.todo.text
+  isEditing.value = true
+  nextTick(() => {
+    editInput.value?.focus()
+  })
+}
+
+function saveEdit() {
+  if (editedText.value.trim() && editedText.value !== props.todo.text) {
+    emit('update', props.todo.id, editedText.value.trim())
+  }
+  isEditing.value = false
+}
+
+function cancelEdit() {
+  isEditing.value = false
 }
 </script>
 
@@ -163,6 +208,28 @@ function deleteTodo() {
   padding: 2px 6px;
   border-radius: var(--radius-sm);
   font-size: var(--font-size-sm);
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.edit-input {
+  width: 100%;
+  padding: var(--spacing-sm);
+  font-size: var(--font-size-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  color: var(--text);
+}
+
+.edit-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
 }
 
 @keyframes fadeIn {

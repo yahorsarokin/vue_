@@ -25,7 +25,7 @@
 <script lang="ts" setup>
 import { useTodoStore } from '../stores/todo'
 import { useFavorites } from '../composables/useFavorites'
-import TodoItem from './TodoItem.vue'
+import TodoItem from '../components/TodoItem.vue'
 
 const store = useTodoStore()
 const { favoriteTodos, toggleFavorite } = useFavorites()

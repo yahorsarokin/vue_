@@ -73,6 +73,16 @@ export const useTodoStore = defineStore('todo', {
         console.error('Error updating todo:', error)
       }
     },
+    async updateTodo(id: string, text: string) {
+      try {
+        const todoRef = doc(db, TODOS_COLLECTION, id)
+        await updateDoc(todoRef, {
+          text,
+        })
+      } catch (error) {
+        console.error('Error updating todo:', error)
+      }
+    },
     setFilter(filter: Filter) {
       this.filter = filter
     },

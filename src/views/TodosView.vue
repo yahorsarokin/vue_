@@ -30,20 +30,47 @@
           @delete="store.deleteTodo"
           @toggle="store.toggleTodo"
           @toggle-favorite="favorites.toggleFavorite"
+          @click="openModal"
         />
       </div>
     </div>
+
+    <TodoModal
+      v-if="selectedTodo"
+      :isOpen="isModalOpen"
+      :todo="selectedTodo"
+      @close="closeModal"
+      @toggle="store.toggleTodo"
+      @delete="store.deleteTodo"
+      @update="store.updateTodo"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
 import { useTodoStore } from '../stores/todo'
 import { useFavorites } from '../composables/useFavorites'
-import TodoItem from './TodoItem.vue'
-import CreateTodo from './CreateTodo.vue'
+import TodoItem from '../components/TodoItem.vue'
+import CreateTodo from '../components/CreateTodo.vue'
+import TodoModal from '../components/TodoModal.vue'
+import type { Todo } from '../stores/todo'
 
 const store = useTodoStore()
 const favorites = useFavorites()
+
+const isModalOpen = ref(false)
+const selectedTodo = ref<Todo | null>(null)
+
+function openModal(todo: Todo) {
+  selectedTodo.value = todo
+  isModalOpen.value = true
+}
+
+function closeModal() {
+  isModalOpen.value = false
+  selectedTodo.value = null
+}
 </script>
 
 <style scoped>

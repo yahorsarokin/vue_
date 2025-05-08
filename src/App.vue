@@ -8,8 +8,8 @@
 import { onMounted, onUnmounted } from 'vue'
 import { useTodoStore } from './stores/todo'
 import AppLayout from './components/AppLayout.vue'
-import TodosView from './components/TodosView.vue'
-import FavoritesView from './components/FavoritesView.vue'
+import TodosView from './views/TodosView.vue'
+import FavoritesView from './views/FavoritesView.vue'
 import { signInAnon } from './firebase'
 
 const store = useTodoStore()
