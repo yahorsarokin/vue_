@@ -1,41 +1,15 @@
 <template>
-  <main class="container">
-    <h1 class="text-center mb-lg">Todo List</h1>
-
-    <div class="card mb-lg">
-      <CreateTodo @add="store.addTodo" />
-    </div>
-
-    <div class="card mb-md">
-      <div class="filters flex gap-sm mb-md">
-        <button :class="{ active: store.filter === 'all' }" @click="store.setFilter('all')">
-          All
-        </button>
-        <button :class="{ active: store.filter === 'active' }" @click="store.setFilter('active')">
-          Active
-        </button>
-        <button
-          :class="{ active: store.filter === 'completed' }"
-          @click="store.setFilter('completed')"
-        >
-          Completed
-        </button>
-      </div>
-
-      <TodoList
-        :todos="store.filteredTodos"
-        @delete="store.deleteTodo"
-        @toggle="store.toggleTodo"
-      />
-    </div>
-  </main>
+  <AppLayout v-slot="{ currentTab }">
+    <component :is="currentTab === 'Todos' ? TodosView : FavoritesView" />
+  </AppLayout>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, onUnmounted } from 'vue'
 import { useTodoStore } from './stores/todo'
-import TodoList from './components/TodoList.vue'
-import CreateTodo from './components/CreateTodo.vue'
+import AppLayout from './components/AppLayout.vue'
+import TodosView from './components/TodosView.vue'
+import FavoritesView from './components/FavoritesView.vue'
 import { signInAnon } from './firebase'
 
 const store = useTodoStore()
@@ -51,6 +25,16 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+
+main {
+  margin-top: var(--spacing-md);
+}
+
 .filters button {
   padding: var(--spacing-xs) var(--spacing-md);
 }
