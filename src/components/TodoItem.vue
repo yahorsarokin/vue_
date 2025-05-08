@@ -1,100 +1,91 @@
 <template>
-  <li class="todo-item">
-    <div class="todo-content" @click="openTodo">
-      <input
-        type="checkbox"
-        class="checkbox"
-        :checked="localCompleted"
-        @change="toggle"
-        @click.stop
-      />
-      <span :class="{ completed: localCompleted }" class="todo-text">
-        {{ todo.text }}
-      </span>
+  <li class="todo-item" :class="{ completed: todo.completed }">
+    <div class="todo-content" @click="$emit('click', todo)">
+      <input type="checkbox" :checked="todo.completed" @click.stop="$emit('toggle', todo.id)" />
+      <span class="todo-text">{{ todo.text }}</span>
     </div>
-    <button @click.stop="$emit('delete', todo.id)" class="delete-btn danger">🗑</button>
+    <div class="todo-actions">
+      <button class="favourite-btn" @click.stop="$emit('toggle-favorite', todo.id)">
+        {{ isFavorite(todo.id) ? '★' : '☆' }}
+      </button>
+      <button @click.stop="$emit('delete', todo.id)" class="delete-btn danger">🗑</button>
+    </div>
   </li>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { useFavorites } from '../composables/useFavorites'
 import type { Todo } from '../stores/todo'
 
-const props = defineProps<{
+defineProps<{
   todo: Todo
 }>()
 
-const emit = defineEmits<{
+defineEmits<{
   (e: 'delete', id: string): void
   (e: 'toggle', id: string): void
   (e: 'click', todo: Todo): void
+  (e: 'toggle-favorite', id: string): void
 }>()
 
-const localCompleted = computed(() => props.todo.completed)
-
-function toggle() {
-  emit('toggle', props.todo.id)
-}
-
-function openTodo() {
-  emit('click', props.todo)
-}
+const { isFavorite } = useFavorites()
 </script>
 
 <style scoped>
 .todo-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-md);
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
   border-bottom: 1px solid var(--border);
-  cursor: pointer;
-  transition: var(--transition-fast);
 }
 
 .todo-item:last-child {
   border-bottom: none;
 }
 
-.todo-item:hover {
-  background-color: var(--medium);
-}
-
 .todo-content {
   display: flex;
   align-items: center;
-  flex-grow: 1;
-}
-
-.completed {
-  text-decoration: line-through;
-  opacity: 0.6;
+  gap: var(--spacing-sm);
+  flex: 1;
+  cursor: pointer;
 }
 
 .todo-text {
-  margin: 0 var(--spacing-sm);
-  word-break: break-word;
+  color: var(--text);
 }
 
-.delete-btn {
-  padding: var(--spacing-xs);
-  min-width: 2rem;
-  height: 2rem;
-  border-radius: var(--radius-full);
+.completed .todo-text {
+  text-decoration: line-through;
+  color: var(--medium);
+}
+
+.todo-actions {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  visibility: hidden;
-  opacity: 0;
-  transition: var(--transition-fast);
+  gap: var(--spacing-xs);
+
+  & > button {
+    font-size: 1.2rem;
+  }
 }
 
-.todo-item:hover .delete-btn {
-  visibility: visible;
-  opacity: 1;
-}
-
-.checkbox {
+.favourite-btn {
+  background: none;
+  border: none;
+  padding: var(--spacing-xs);
   cursor: pointer;
+  color: var(--warning);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+.favourite-btn:hover {
+  background: var(--background-alt);
+  color: var(--text);
+}
+
+.is-favorite {
+  color: var(--warning);
 }
 </style>

@@ -29,6 +29,7 @@
           :todo="todo"
           @delete="store.deleteTodo"
           @toggle="store.toggleTodo"
+          @toggle-favorite="favorites.toggleFavorite"
         />
       </div>
     </div>
@@ -37,10 +38,12 @@
 
 <script lang="ts" setup>
 import { useTodoStore } from '../stores/todo'
+import { useFavorites } from '../composables/useFavorites'
 import TodoItem from './TodoItem.vue'
 import CreateTodo from './CreateTodo.vue'
 
 const store = useTodoStore()
+const favorites = useFavorites()
 </script>
 
 <style scoped>
